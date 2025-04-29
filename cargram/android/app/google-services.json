@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "39008823196",
+    "project_id": "cargram-731ee",
+    "storage_bucket": "cargram-731ee.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:39008823196:android:353070ae087956322e0a59",
+        "android_client_info": {
+          "package_name": "com.example.cargram"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgUzzi2mHlVKSVkAFVmBT2c4cwv0TK0CY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
