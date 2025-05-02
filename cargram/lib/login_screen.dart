@@ -13,6 +13,21 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String _errorMessage = '';
+  bool _isMounted = false; // Add a flag to track if the widget is mounted
+
+  @override
+  void initState() {
+    super.initState();
+    _isMounted = true; // Set the flag to true when the widget is created
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _isMounted = false; // Set the flag to false when the widget is disposed
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +54,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     fontFamily: 'Geo',
                   ),
                 ),
-
                 const Text(
                   'Click Post, n Go!',
                   style: TextStyle(
@@ -55,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
                     labelText: 'Email',
-                    labelStyle: const TextStyle(color: Color(0xFFA00000)),
+                    labelStyle: TextStyle(color: Color(0xFFA00000)),
                     filled: true,
                     fillColor: Color.fromRGBO(255, 255, 255, 0.8),
                   ),
@@ -66,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   obscureText: true,
                   decoration: const InputDecoration(
                     labelText: 'Password',
-                    labelStyle: const TextStyle(color: Color(0xFF52020F)),
+                    labelStyle: TextStyle(color: Color(0xFF52020F)),
                     filled: true,
                     fillColor: Color.fromRGBO(255, 255, 255, 0.8),
                   ),
@@ -85,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             password: password,
                           );
 
-                      if (userCredential.user != null) {
+                      if (userCredential.user != null && _isMounted) {
                         print(
                           'Login successful! User ID: ${userCredential.user!.uid}',
                         );
@@ -98,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         setState(() {
                           _errorMessage = '';
                         });
-                      } else {
+                      } else if (_isMounted) {
                         setState(() {
                           _errorMessage = 'Login failed. Please try again.';
                         });
@@ -114,15 +128,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       } else if (e.code == 'user-disabled') {
                         errorMessage = 'This user account has been disabled.';
                       }
-                      setState(() {
-                        _errorMessage = errorMessage;
-                      });
+                      if (_isMounted) {
+                        setState(() {
+                          _errorMessage = errorMessage;
+                        });
+                      }
                       print('Firebase Auth Error: ${e.code} - ${e.message}');
                     } catch (e) {
-                      setState(() {
-                        _errorMessage =
-                            'An unexpected error occurred. Please try again.';
-                      });
+                      if (_isMounted) {
+                        setState(() {
+                          _errorMessage =
+                              'An unexpected error occurred. Please try again.';
+                        });
+                      }
                       print('Unexpected Error: $e');
                     }
                   },
